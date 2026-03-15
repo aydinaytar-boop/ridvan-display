@@ -686,12 +686,31 @@ function getKametFor(key){
 /* =========================
    GERİ SAYIM ETİKETLERİ
 ========================= */
-function updateCountdownLabels(){
+function updateCountdownLabels(mode){
   const h = document.getElementById("lbl-hours");
   const m = document.getElementById("lbl-mins");
   const s = document.getElementById("lbl-secs");
 
-  if(currentLang==="tr"){
+  // mode = "kamet" → KAMET yaz
+  // mode = "vakit" → mevcut etiketleri kullan
+  // mode = "ezan" → 60 saniyelik dua süresi
+
+  if(mode === "kamet"){
+    if(h) h.textContent = "KAMET";
+    if(m) m.textContent = "";
+    if(s) s.textContent = "";
+    return;
+  }
+
+  if(mode === "ezan"){
+    if(h) h.textContent = "Ezan Duası";
+    if(m) m.textContent = "";
+    if(s) s.textContent = "";
+    return;
+  }
+
+  // Varsayılan: vakte kalan süre (dokunmuyoruz)
+  if(currentLang === "tr"){
     if(h) h.textContent = "Saat";
     if(m) m.textContent = "Dakika";
     if(s) s.textContent = "Saniye";
