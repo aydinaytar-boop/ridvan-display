@@ -583,75 +583,72 @@ function toSeconds(t){
 }
 
 /* =========================
-   EZAN DUASI
+   EZAN DUASI MODU (TAM METİNLİ)
 ========================= */
-const EZAN_TEXTS = {
-  ar:"اللَّهُمَّ رَبَّ هٰذِهِ الدَّعْوَةِ التَّامَّةِ، وَالصَّلَاةِ الْقَائِمَةِ، آتِ مُحَمَّدًا الْوَسِيلَةَ وَالْفَضِيلَةَ، وَابْعَثْهُ مَقَامًا مَحْمُودًا الَّذِي وَعَدْتَهُ",
-  tr:"Allah’ım! Bu tam davetin ve kılınmakta olan namazın Rabbi olan Allah’ım! Muhammed’e vesileyi ve fazileti ver. Onu, kendisine vaad ettiğin Makam-ı Mahmud’a ulaştır.",
-  de:"O Allah, Herr dieses vollkommenen Rufes und des zu verrichtenden Gebets. Gib Muhammad die Mittlerschaft und die Vorzüglichkeit und erwecke ihn zu der lobenswerten Stellung, die Du ihm versprochen hast."
-};
 
 let duaMode = false;
 let duaModeUntil = 0;
+let duaStep = 0; // 0=AR, 1=TR, 2=DE
 
-function startDuaMode(){
+// Senin verdiğin tam metinler
+const EZAN_TEXTS = {
+  ar: "اللَّهُمَّ رَبَّ هٰذِهِ الدَّعْوَةِ التَّامَّةِ، وَالصَّلَاةِ الْقَائِمَةِ، آتِ مُحَمَّدًا الْوَسِيلَةَ وَالْفَضِيلَةَ، وَابْعَثْهُ مَقَامًا مَحْمُودًا الَّذِي وَعَدْتَهُ",
+  tr: "Allah’ım! Bu tam davetin ve kılınmakta olan namazın Rabbi olan Allah’ım! Muhammed’e vesileyi ve fazileti ver. Onu, kendisine vaad ettiğin Makam-ı Mahmud’a ulaştır.",
+  de: "O Allah, Herr dieses vollkommenen Rufes und des zu verrichtenden Gebets. Gib Muhammad die Mittlerschaft und die Vorzüglichkeit und erwecke ihn zu der lobenswerten Stellung, die Du ihm versprochen hast."
+};
+
+function startDuaMode() {
   duaMode = true;
+  duaStep = 0;
+
+  // 60 saniyelik dua süresi
   duaModeUntil = Math.floor(Date.now()/1000) + 60;
 
-  const panelRight = document.querySelector(".panel-right");
-  const msgBox     = document.getElementById("message-box");
-  const duyuruBox  = document.getElementById("duyuru-text");
-  const ezanBox    = document.getElementById("ezan-display");
+  // Etiket: Ezan Duası
+  updateCountdownLabels("ezan");
 
-  const ar = document.getElementById("ezan-ar");
-  const tr = document.getElementById("ezan-tr");
-  const de = document.getElementById("ezan-de");
+  // İlk dil: Arapça
+  showDuaStep();
 
-  if(panelRight) panelRight.classList.add("right-panel-ezan");
-
-  if(msgBox)    msgBox.style.display    = "none";
-  if(duyuruBox) duyuruBox.style.display = "none";
-
-  if(ar) ar.innerHTML    = EZAN_TEXTS.ar;
-  if(tr) tr.textContent  = EZAN_TEXTS.tr;
-  if(de) de.textContent  = EZAN_TEXTS.de;
-
-  if(ar) ar.classList.remove("hidden");
-  if(tr) tr.classList.add("hidden");
-  if(de) de.classList.add("hidden");
-
-  if(ezanBox) ezanBox.classList.remove("hidden");
-
-  setTimeout(()=>{
-    if(duaMode){
-      if(ar) ar.classList.add("hidden");
-      if(tr) tr.classList.remove("hidden");
-      if(de) de.classList.add("hidden");
-    }
-  }, 20000);
-
-  setTimeout(()=>{
-    if(duaMode){
-      if(ar) ar.classList.add("hidden");
-      if(tr) tr.classList.add("hidden");
-      if(de) de.classList.remove("hidden");
-    }
-  }, 40000);
+  // Her 20 saniyede dil değiştir
+  setTimeout(()=>{ if(duaMode){ duaStep=1; showDuaStep(); } }, 20000);
+  setTimeout(()=>{ if(duaMode){ duaStep=2; showDuaStep(); } }, 40000);
 }
 
-function stopDuaMode(){
+function stopDuaMode() {
   duaMode = false;
+  duaStep = 0;
 
-  const panelRight = document.querySelector(".panel-right");
-  const msgBox     = document.getElementById("message-box");
-  const duyuruBox  = document.getElementById("duyuru-text");
-  const ezanBox    = document.getElementById("ezan-display");
+  // Dua bitti → geri sayım etiketlerini normale döndür
+  updateCountdownLabels("vakit");
 
-  if(ezanBox) ezanBox.classList.add("hidden");
-  if(panelRight) panelRight.classList.remove("right-panel-ezan");
+  // Günün mesajını geri getir
+  if(window.DuaModule){
+    window.DuaModule.updateDailyDua(currentLang);
+  }
+}
 
-  if(msgBox)    msgBox.style.display    = "block";
-  if(duyuruBox) duyuruBox.style.display = "block";
+function showDuaStep() {
+  const arEl  = document.getElementById("msg-ar");
+  const subEl = document.getElementById("msg-sub");
+
+  if(!arEl || !subEl) return;
+
+  if(duaStep === 0){
+    // Arapça
+    arEl.textContent = EZAN_TEXTS.ar;
+    subEl.textContent = "";
+  }
+  else if(duaStep === 1){
+    // Türkçe
+    arEl.textContent = "";
+    subEl.textContent = EZAN_TEXTS.tr;
+  }
+  else if(duaStep === 2){
+    // Almanca
+    arEl.textContent = "";
+    subEl.textContent = EZAN_TEXTS.de;
+  }
 }
 
 /* =========================
