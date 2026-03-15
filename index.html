@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <title>Ridvan Camii – Namaz Vakitleri</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="style.css?v=20260313">
+</head>
+
+<body>
+  <div class="outer-frame">
+
+    <!-- ÜST BAR -->
+    <header class="top-bar">
+      <div class="top-left">
+        <div id="greg-date" class="greg-date"></div>
+        <div id="hijri-date" class="hijri-date"></div>
+      </div>
+
+      <div class="top-center" id="main-title">
+        RIDVAN CAMİİ – VİYANA
+      </div>
+
+      <div class="top-right">
+        <div id="clock" class="clock"></div>
+      </div>
+    </header>
+
+    <!-- ANA PANELLER -->
+    <main class="main-panels">
+
+      <!-- SOL PANEL -->
+      <section class="panel panel-left">
+        <h2 class="panel-title" id="title-left">NAMAZ VAKİTLERİ</h2>
+
+        <table class="vakit-table">
+          <thead>
+            <tr>
+              <th id="th-vakit">Vakit</th>
+              <th id="th-ezan">Ezan</th>
+              <th id="th-kamet">Kamet</th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <tr id="row-imsak">
+              <td class="vakit-label">İmsak</td>
+              <td class="vakit-time" id="imsak-ezan">--:--</td>
+              <td class="vakit-time" id="imsak-kamet">MANUEL</td>
+            </tr>
+
+            <tr id="row-gunes">
+              <td class="vakit-label">Güneş</td>
+              <td class="vakit-time" id="gunes-ezan">--:--</td>
+              <td class="vakit-time" id="gunes-kamet">-</td>
+            </tr>
+
+            <tr id="row-ogle">
+              <td class="vakit-label">Öğle</td>
+              <td class="vakit-time" id="ogle-ezan">--:--</td>
+              <td class="vakit-time" id="ogle-kamet">--:--</td>
+            </tr>
+
+            <tr id="row-ikindi">
+              <td class="vakit-label">İkindi</td>
+              <td class="vakit-time" id="ikindi-ezan">--:--</td>
+              <td class="vakit-time" id="ikindi-kamet">--:--</td>
+            </tr>
+
+            <tr id="row-aksam">
+              <td class="vakit-label">Akşam</td>
+              <td class="vakit-time" id="aksam-ezan">--:--</td>
+              <td class="vakit-time" id="aksam-kamet">--:--</td>
+            </tr>
+
+            <tr id="row-yatsi">
+              <td class="vakit-label">Yatsı</td>
+              <td class="vakit-time" id="yatsi-ezan">--:--</td>
+              <td class="vakit-time" id="yatsi-kamet">--:--</td>
+            </tr>
+
+            <tr id="row-cuma" class="cuma-row">
+              <td class="vakit-label">Cuma</td>
+              <td class="vakit-time" id="cuma-ezan">13:10</td>
+              <td class="vakit-time" id="cuma-kamet">13:30</td>
+            </tr>
+
+            <!-- BAYRAM SATIRI (DÜZELTİLMİŞ) -->
+            <tr id="row-bayram" class="bayram-row">
+              <td class="vakit-label">Bayram</td>
+              <td class="vakit-time" id="bayram-ezan">--:--</td>
+              <td class="vakit-time" id="bayram-kamet">-</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ORTA PANEL -->
+<section class="panel panel-center">
+  <h2 class="panel-title" id="title-center">GÜNÜN VAKTİ</h2>
+
+  <div id="current-prayer" class="current-prayer">--</div>
+  <div id="next-prayer" class="next-prayer">Sonraki: -</div>
+
+  <div class="countdown-grid">
+    <div class="count-box">
+      <div class="count-num" id="count-hours-num">00</div>
+      <div class="count-label">Saat</div>
+    </div>
+    <div class="count-box">
+      <div class="count-num" id="count-mins-num">00</div>
+      <div class="count-label">Dakika</div>
+    </div>
+    <div class="count-box">
+      <div class="count-num" id="count-secs-num">00</div>
+      <div class="count-label">Saniye</div>
+    </div>
+  </div>
+
+  <!-- DÜZELTİLMİŞ BUTON ALANI -->
+  <div class="center-bottom-actions">
+
+    <button class="action-btn new-btn" data-target="sabah-modal">Sabah Kameti</button>
+    <button class="action-btn new-btn" data-target="duyuru-modal">Duyurular</button>
+    <button class="action-btn new-btn" data-target="bayram-modal">Bayram Namazı</button>
+
+    <div class="hijri-box">
+      <span>Hicrî düzeltme:</span>
+      <button id="hijri-minus" class="hijri-btn">-1</button>
+      <span id="hijri-offset-display">0</span>
+      <button id="hijri-plus" class="hijri-btn">+1</button>
+    </div>
+
+  </div>
+</section>
+
+      <!-- SAĞ PANEL -->
+      <section class="panel panel-right">
+        <h2 class="panel-title" id="title-right">GÜNÜN MESAJI</h2>
+
+        <div class="right-split">
+          <div class="right-top"><div id="msg-ar"></div></div>
+          <div class="right-middle"><div id="msg-sub"></div></div>
+          <div class="right-bottom">
+            <div class="duyuru-label">DUYURU:</div>
+            <div id="duyuru-text">-</div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ALT BAR -->
+    <footer class="bottom-bar">
+      <div class="footer-text">
+        <div class="framed-footer">
+          <span id="footer-lang">Bu uygulama AyTa® tarafından hazırlanmıştır</span>
+        </div>
+      </div>
+
+      <div class="logo-frame">
+        <div class="logo-bg">
+          <img src="./img/logo.png" class="logo-img" alt="ridvan-display">
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- SABAH MODALI -->
+  <div id="sabah-modal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Sabah Kamet Saatini Ayarla</h3>
+      <input type="time" id="input-sabah-kamet">
+      <div class="modal-actions">
+        <button id="sabah-save" class="small-btn">Kaydet</button>
+        <button id="sabah-cancel" class="small-btn">İptal</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DUYURU MODALI -->
+  <div id="duyuru-modal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Duyuru Metni</h3>
+      <textarea id="input-duyuru" rows="4"></textarea>
+      <div class="modal-actions">
+        <button id="duyuru-save" class="small-btn">Kaydet</button>
+        <button id="duyuru-cancel" class="small-btn">İptal</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BAYRAM MODALI (DÜZELTİLMİŞ) -->
+  <div id="bayram-modal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Bayram Namazı Saatini Ayarla</h3>
+
+      <label>Ezan Saati:</label>
+      <input type="time" id="bayram-ezan-input">
+
+      <div class="modal-actions">
+        <button id="bayram-save" class="small-btn">Kaydet</button>
+        <button id="bayram-cancel" class="small-btn">İptal</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EZAN DUASI ALANI -->
+  <div id="ezan-display" class="hidden">
+    <div id="ezan-ar"></div>
+    <div id="ezan-tr"></div>
+    <div id="ezan-de"></div>
+  </div>
+
+  <!-- MESSAGE BOX -->
+  <div id="message-box" class="hidden"></div>
+
+  <!-- BLACKOUT -->
+  <div id="dim-overlay" class="hidden"></div>
+
+  <script src="dua-arsivi/dua-arsivi.js"></script>
+  <script src="script.js"></script>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+
+    // Açma
+    document.querySelectorAll(".new-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const target = btn.getAttribute("data-target");
+        const modal = document.getElementById(target);
+        if (modal) modal.classList.remove("hidden");
+      });
+    });
+
+    // Kapatma
+    document.querySelectorAll(".modal .small-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const modal = btn.closest(".modal");
+        if (modal) modal.classList.add("hidden");
+      });
+    });
+
+    // BAYRAM KAYDET
+    document.getElementById("bayram-save").addEventListener("click", () => {
+      const ezan = document.getElementById("bayram-ezan-input").value;
+
+      if (ezan) {
+        document.getElementById("bayram-ezan").textContent = ezan;
+        document.getElementById("bayram-kamet").textContent = "-";
+      }
+
+      document.getElementById("bayram-modal").classList.add("hidden");
+    });
+
+    // BAYRAM İPTAL
+    document.getElementById("bayram-cancel").addEventListener("click", () => {
+      document.getElementById("bayram-modal").classList.add("hidden");
+    });
+
+  });
+  </script>
+
+</body>
+</html>
