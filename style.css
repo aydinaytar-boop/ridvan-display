@@ -405,3 +405,37 @@ body {
   display: none; 
 }
 
+/* Işık Hüzmesi Animasyonu */
+@keyframes shine {
+  0% {
+    transform: translateX(-150%);
+  }
+  50% {
+    transform: translateX(150%);
+  }
+  100% {
+    transform: translateX(150%);
+  }
+}
+
+/* Sayaç Kutusu – Parlama Efekti */
+.count-box {
+  position: relative;
+  overflow: hidden;
+}
+
+.count-box::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0.35) 50%,
+    rgba(255,255,255,0) 100%
+  );
+  animation: shine 3s infinite;
+}
