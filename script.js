@@ -953,9 +953,10 @@ function applyLanguage(){
   if(thEzan)  thEzan.textContent  = (currentLang==="tr" ? "Ezan"  : "Adhan");
   if(thKamet) thKamet.textContent = (currentLang==="tr" ? "Kamet" : "Iqama");
 
+  /* --- VAKİT İSİMLERİ (TR / DE) --- */
   const vakitNamesTR = ["İmsak","Güneş","Öğle","İkindi","Akşam","Yatsı","Cuma"];
-  const vakitNamesDE = ["Fadjr","Sonne","Dhuhr","Assr","Maghrib","Ischaa","Freitag"];
-  const vakitIDs = ["imsak","gunes","ogle","ikindi","aksam","yatsi","cuma"];
+  const vakitNamesDE = ["Fadjr","Schuruq","Dhuhr","Assr","Maghrib","Ischaa","Dschum'a"];
+  const vakitIDs     = ["imsak","gunes","ogle","ikindi","aksam","yatsi","cuma"];
 
   vakitIDs.forEach((id, i)=>{
     const el = document.getElementById("lbl-"+id);
