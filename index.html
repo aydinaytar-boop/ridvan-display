@@ -30,60 +30,70 @@
     <main class="main-panels">
 
       <!-- SOL PANEL -->
-      <section class="panel panel-left">
-        <h2 class="panel-title" id="title-left">NAMAZ VAKİTLERİ</h2>
+<section class="panel panel-left">
+  <h2 class="panel-title" id="title-left">NAMAZ VAKİTLERİ</h2>
 
-        <table class="vakit-table">
-          <thead>
-            <tr>
-              <th id="th-vakit">Vakit</th>
-              <th id="th-ezan">Ezan</th>
-              <th id="th-kamet">Kamet</th>
-            </tr>
-          </thead>
-          <tbody>
+  <table class="vakit-table">
+    <thead>
+      <tr>
+        <th id="th-vakit">Vakit</th>
+        <th id="th-ezan">Ezan</th>
+        <th id="th-kamet">Kamet</th>
+      </tr>
+    </thead>
+    <tbody>
 
-            <tr id="row-imsak">
-              <td class="vakit-label">İmsak</td>
-              <td class="vakit-time" id="imsak-ezan">--:--</td>
-              <td class="vakit-time" id="imsak-kamet">MANUEL</td>
-            </tr>
+      <tr id="row-imsak">
+        <td class="vakit-label" id="lbl-imsak">İmsak</td>
+        <td class="vakit-time" id="imsak-ezan">--:--</td>
+        <td class="vakit-time" id="imsak-kamet">MANUEL</td>
+      </tr>
 
-            <tr id="row-gunes">
-              <td class="vakit-label">Güneş</td>
-              <td class="vakit-time" id="gunes-ezan">--:--</td>
-              <td class="vakit-time" id="gunes-kamet">-</td>
-            </tr>
+      <tr id="row-gunes">
+        <td class="vakit-label" id="lbl-gunes">Güneş</td>
+        <td class="vakit-time" id="gunes-ezan">--:--</td>
+        <td class="vakit-time" id="gunes-kamet">-</td>
+      </tr>
 
-            <tr id="row-ogle">
-              <td class="vakit-label">Öğle</td>
-              <td class="vakit-time" id="ogle-ezan">--:--</td>
-              <td class="vakit-time" id="ogle-kamet">--:--</td>
-            </tr>
+      <tr id="row-ogle">
+        <td class="vakit-label" id="lbl-ogle">Öğle</td>
+        <td class="vakit-time" id="ogle-ezan">--:--</td>
+        <td class="vakit-time" id="ogle-kamet">--:--</td>
+      </tr>
 
-            <tr id="row-ikindi">
-              <td class="vakit-label">İkindi</td>
-              <td class="vakit-time" id="ikindi-ezan">--:--</td>
-              <td class="vakit-time" id="ikindi-kamet">--:--</td>
-            </tr>
+      <tr id="row-ikindi">
+        <td class="vakit-label" id="lbl-ikindi">İkindi</td>
+        <td class="vakit-time" id="ikindi-ezan">--:--</td>
+        <td class="vakit-time" id="ikindi-kamet">--:--</td>
+      </tr>
 
-            <tr id="row-aksam">
-              <td class="vakit-label">Akşam</td>
-              <td class="vakit-time" id="aksam-ezan">--:--</td>
-              <td class="vakit-time" id="aksam-kamet">--:--</td>
-            </tr>
+      <tr id="row-aksam">
+        <td class="vakit-label" id="lbl-aksam">Akşam</td>
+        <td class="vakit-time" id="aksam-ezan">--:--</td>
+        <td class="vakit-time" id="aksam-kamet">--:--</td>
+      </tr>
 
-            <tr id="row-yatsi">
-              <td class="vakit-label">Yatsı</td>
-              <td class="vakit-time" id="yatsi-ezan">--:--</td>
-              <td class="vakit-time" id="yatsi-kamet">--:--</td>
-            </tr>
+      <tr id="row-yatsi">
+        <td class="vakit-label" id="lbl-yatsi">Yatsı</td>
+        <td class="vakit-time" id="yatsi-ezan">--:--</td>
+        <td class="vakit-time" id="yatsi-kamet">--:--</td>
+      </tr>
 
-            <tr id="row-cuma" class="cuma-row">
-              <td class="vakit-label">Cuma</td>
-              <td class="vakit-time" id="cuma-ezan">13:10</td>
-              <td class="vakit-time" id="cuma-kamet">13:30</td>
-            </tr>
+      <tr id="row-cuma" class="cuma-row">
+        <td class="vakit-label" id="lbl-cuma">Cuma</td>
+        <td class="vakit-time" id="cuma-ezan">13:10</td>
+        <td class="vakit-time" id="cuma-kamet">13:30</td>
+      </tr>
+
+      <tr id="row-bayram" class="bayram-row">
+        <td class="vakit-label" id="lbl-bayram">Bayram</td>
+        <td class="vakit-time" id="bayram-ezan">--:--</td>
+        <td class="vakit-time" id="bayram-kamet">-</td>
+      </tr>
+
+    </tbody>
+  </table>
+</section>
 
             <!-- BAYRAM SATIRI (DÜZELTİLMİŞ) -->
             <tr id="row-bayram" class="bayram-row">
@@ -96,7 +106,7 @@
         </table>
       </section>
 
-      <!-- ORTA PANEL -->
+     <!-- ORTA PANEL -->
 <section class="panel panel-center">
   <h2 class="panel-title" id="title-center">GÜNÜN VAKTİ</h2>
 
@@ -106,15 +116,15 @@
   <div class="countdown-grid">
     <div class="count-box">
       <div class="count-num" id="count-hours-num">00</div>
-      <div class="count-label">Saat</div>
+      <div class="count-label" id="lbl-hours">Saat</div>
     </div>
     <div class="count-box">
       <div class="count-num" id="count-mins-num">00</div>
-      <div class="count-label">Dakika</div>
+      <div class="count-label" id="lbl-mins">Dakika</div>
     </div>
     <div class="count-box">
       <div class="count-num" id="count-secs-num">00</div>
-      <div class="count-label">Saniye</div>
+      <div class="count-label" id="lbl-secs">Saniye</div>
     </div>
   </div>
 
