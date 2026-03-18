@@ -3,11 +3,11 @@
 ========================= */
 const fallbackTimes = {
   imsak:"05:19",
-  gunes:"06:57",
-  ogle:"12:14",
+  güneş:"06:57",
+  öğle:"12:14",
   ikindi:"14:50",
-  aksam:"17:21",
-  yatsi:"18:47"
+  akşam:"17:21",
+  yatsı:"18:47"
 };
 
 /* ================== NAMAZ VAKİTLERİ 2026 ================== */
@@ -416,11 +416,11 @@ function getTodayTimesFromJSON() {
 
   return {
     imsak:  row.i,
-    gunes:  row.g,
-    ogle:   row.o,
+    güneş:  row.g,
+    öğle:   row.o,
     ikindi: row.k,
-    aksam:  row.a,
-    yatsi:  row.y
+    akşam:  row.a,
+    yatsı:  row.y
   };
 }
 
@@ -450,11 +450,11 @@ function addMinutesToTime(time, min){
 function getKamatTimes(v){
   return {
     imsak: lsGet("sabahKamet") || "MANUEL",
-    gunes: "-",
-    ogle:  addMinutesToTime(v.ogle, 10),
+    güneş: "-",
+    öğle:  addMinutesToTime(v.öğle, 10),
     ikindi:addMinutesToTime(v.ikindi, 10),
-    aksam: addMinutesToTime(v.aksam, 5),
-    yatsi: addMinutesToTime(v.yatsi, 10)
+    akşam: addMinutesToTime(v.akşam, 5),
+    yatsı: addMinutesToTime(v.yatsı, 10)
   };
 }
 
@@ -564,12 +564,12 @@ function updateClockAndDates(){
   const hijriMonth = hijri.month;
 
   let isAfterDhuhr = false;
-  const ogleEl = document.getElementById("ogle-ezan");
-  if (ogleEl && ogleEl.textContent.includes(":")) {
-    const [oh, om] = ogleEl.textContent.split(":").map(Number);
+  const öğleEl = document.getElementById("öğle-ezan");
+  if (öğleEl && öğleEl.textContent.includes(":")) {
+    const [oh, om] = öğleEl.textContent.split(":").map(Number);
     const nowSec  = now.getHours()*3600 + now.getMinutes()*60 + now.getSeconds();
-    const ogleSec = oh*3600 + om*60;
-    isAfterDhuhr = nowSec >= ogleSec;
+    const öğleSec = oh*3600 + om*60;
+    isAfterDhuhr = nowSec >= öğleSec;
   }
 
   updateBayramRow(hijriDay, hijriMonth, isAfterDhuhr);
@@ -756,18 +756,18 @@ function loadPrayerTimes(){
 
   const map = {
     "imsak-ezan": t.imsak,
-    "gunes-ezan": t.gunes,
-    "ogle-ezan":  t.ogle,
+    "güneş-ezan": t.güneş,
+    "öğle-ezan":  t.öğle,
     "ikindi-ezan":t.ikindi,
-    "aksam-ezan": t.aksam,
-    "yatsi-ezan": t.yatsi,
+    "akşam-ezan": t.akşam,
+    "yatsı-ezan": t.yatsı,
 
     "imsak-kamet": k.imsak,
-    "gunes-kamet": k.gunes,
-    "ogle-kamet":  k.ogle,
+    "güneş-kamet": k.güneş,
+    "öğle-kamet":  k.öğle,
     "ikindi-kamet":k.ikindi,
-    "aksam-kamet": k.aksam,
-    "yatsi-kamet": k.yatsi
+    "akşam-kamet": k.akşam,
+    "yatsı-kamet": k.yatsı
   };
 
   Object.keys(map).forEach(id=>{
@@ -796,11 +796,11 @@ function updateCurrentAndNext(times){
 
   const list = [
     {key:"imsak", nameTR:"İmsak",  nameDE:"Fadjr",   time:times.imsak},
-    {key:"gunes", nameTR:"Güneş",  nameDE:"Sonne",   time:times.gunes},
-    {key:"ogle",  nameTR:"Öğle",   nameDE:"Dhuhr",   time:times.ogle},
+    {key:"güneş", nameTR:"Güneş",  nameDE:"Sonne",   time:times.güneş},
+    {key:"öğle",  nameTR:"Öğle",   nameDE:"Dhuhr",   time:times.öğle},
     {key:"ikindi",nameTR:"İkindi", nameDE:"Assr",    time:times.ikindi},
-    {key:"aksam", nameTR:"Akşam",  nameDE:"Maghrib", time:times.aksam},
-    {key:"yatsi", nameTR:"Yatsı",  nameDE:"Ischaa",  time:times.yatsi}
+    {key:"akşam", nameTR:"Akşam",  nameDE:"Maghrib", time:times.akşam},
+    {key:"yatsı", nameTR:"Yatsı",  nameDE:"Ischaa",  time:times.yatsı}
   ];
 
   let currentEzan = null, nextEzan = null;
@@ -875,7 +875,7 @@ function updateCurrentAndNext(times){
     }
   }
 
-  const allRows = ["imsak","gunes","ogle","ikindi","aksam","yatsi"];
+  const allRows = ["imsak","güneş","öğle","ikindi","akşam","yatsı"];
   allRows.forEach(k=>{
     const r = document.getElementById("row-" + k);
     if(r) r.classList.remove("active-vakit");
@@ -956,7 +956,7 @@ function applyLanguage(){
   /* --- VAKİT İSİMLERİ (TR / DE) --- */
   const vakitNamesTR = ["İmsak","Güneş","Öğle","İkindi","Akşam","Yatsı","Cuma"];
   const vakitNamesDE = ["Fadjr","Schuruq","Dhuhr","Assr","Maghrib","Ischaa","Dschum'a"];
-  const vakitIDs     = ["imsak","gunes","ogle","ikindi","aksam","yatsi","cuma"];
+  const vakitIDs     = ["imsak","güneş","öğle","ikindi","akşam","yatsı","cuma"];
 
   vakitIDs.forEach((id, i)=>{
     const el = document.getElementById("lbl-"+id);
@@ -1010,11 +1010,11 @@ function updateTimes(t){
   if(!t) return;
   const map = {
     "imsak-ezan": t.imsak,
-    "gunes-ezan": t.gunes,
-    "ogle-ezan":  t.ogle,
+    "güneş-ezan": t.güneş,
+    "öğle-ezan":  t.öğle,
     "ikindi-ezan":t.ikindi,
-    "aksam-ezan": t.aksam,
-    "yatsi-ezan": t.yatsi
+    "akşam-ezan": t.akşam,
+    "yatsı-ezan": t.yatsı
   };
   Object.keys(map).forEach(id=>{
     const el = document.getElementById(id);
@@ -1142,18 +1142,18 @@ function fillTimesTable() {
 
   const map = {
     "imsak-ezan":  v.imsak,
-    "gunes-ezan":  v.gunes,
-    "ogle-ezan":   v.ogle,
+    "güneş-ezan":  v.güneş,
+    "öğle-ezan":   v.öğle,
     "ikindi-ezan": v.ikindi,
-    "aksam-ezan":  v.aksam,
-    "yatsi-ezan":  v.yatsi,
+    "akşam-ezan":  v.akşam,
+    "yatsı-ezan":  v.yatsı,
 
     "imsak-kamet":  k.imsak,
-    "gunes-kamet":  k.gunes,
-    "ogle-kamet":   k.ogle,
+    "güneş-kamet":  k.güneş,
+    "öğle-kamet":   k.öğle,
     "ikindi-kamet": k.ikindi,
-    "aksam-kamet":  k.aksam,
-    "yatsi-kamet":  k.yatsi
+    "akşam-kamet":  k.akşam,
+    "yatsı-kamet":  k.yatsı
   };
 
   Object.entries(map).forEach(([id, val]) => {
@@ -1177,11 +1177,11 @@ function updateCurrentAndNextAndCountdown() {
 
   const prayers = [
     { key: "imsak",  ezan: v.imsak,  kamet: k.imsak },
-    { key: "gunes",  ezan: v.gunes,  kamet: k.gunes },
-    { key: "ogle",   ezan: v.ogle,   kamet: k.ogle },
+    { key: "güneş",  ezan: v.güneiş,  kamet: k.güneş },
+    { key: "öğle",   ezan: v.öğle,   kamet: k.öğle },
     { key: "ikindi", ezan: v.ikindi, kamet: k.ikindi },
-    { key: "aksam",  ezan: v.aksam,  kamet: k.aksam },
-    { key: "yatsi",  ezan: v.yatsi,  kamet: k.yatsi }
+    { key: "akşam",  ezan: v.akşam,  kamet: k.akşam },
+    { key: "yatsı",  ezan: v.yatsı,  kamet: k.yatsı }
   ];
 
   // aktif vakit + sonraki vakit
@@ -1209,7 +1209,7 @@ function updateCurrentAndNextAndCountdown() {
   if (nextEl) nextEl.textContent = next ? `Sonraki: ${next.key.toUpperCase()}` : "Sonraki: -";
 
   // tablo satırlarını vurgula
-  ["imsak","gunes","ogle","ikindi","aksam","yatsi"].forEach(k => {
+  ["imsak","güneş","öğle","ikindi","akşam","yatsı"].forEach(k => {
     const row = document.getElementById("row-" + k);
     if (!row) return;
     if (k === current.key) row.classList.add("active-vakit");
