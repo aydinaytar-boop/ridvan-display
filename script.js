@@ -393,6 +393,28 @@ const vakitler2026 = [
 
 
 /* =========================
+   VAKİT İSİMLERİ
+========================= */
+const vakitNames = {
+  tr: {
+    imsak:  "İmsak",
+    gunes:  "Güneş",
+    ogle:   "Öğle",
+    ikindi: "İkindi",
+    aksam:  "Akşam",
+    yatsi:  "Yatsı"
+  },
+  de: {
+    imsak:  "Fadjr",
+    gunes:  "Shuruk",
+    ogle:   "Duhr",
+    ikindi: "Assr",
+    aksam:  "Magrib",
+    yatsi:  "Ishaa"
+  }
+};
+
+/* =========================
    JSON'DAN BUGÜNÜ ÇEK
 ========================= */
 function getTodayTimesFromJSON() {
@@ -416,7 +438,7 @@ function getTodayTimesFromJSON() {
 }
 
 /* =========================
-   LOCALSTORAGE
+   LOCAL STORAGE
 ========================= */
 function lsGet(k){
   try { return JSON.parse(localStorage.getItem(k)); }
@@ -563,44 +585,53 @@ function toSeconds(t){
 /* =========================
    EZAN → DUA → KAMET → BLACKOUT
 ========================= */
-let phase = "normal"; // normal | ezan | kamet | blackout
+let phase = "normal";
 let currentEzanSec = null;
 let currentKametSec = null;
 
+/* SAĞ PANELDE EZAN DUASI 20+20+20 */
+async function playEzanDuaSequence() {
+  const arEl = document.getElementById("msg-ar");
+  const subEl = document.getElementById("msg-sub");
+  if (!arEl || !subEl) return;
+
+  // Günün duasını dua-arsivi.js üzerinden al
+  const dayIndex = Math.floor(
+    (new Date() - new Date(new Date().getFullYear(), 0, 1)) / 86400000
+  );
+  const list = window.DuaModule && window.DuaModule.__ALL_DUAS
+    ? window.DuaModule.__ALL_DUAS
+    : null;
+
+  // Eğer DuaModule içinde tüm listeyi dışarı vermiyorsan,
+  // burayı kendi yapına göre uyarlayacaksın.
+  if (!list || !list[dayIndex]) return;
+  const dua = list[dayIndex];
+
+  // 1) Arapça — 20 saniye
+  arEl.textContent = dua.ar;
+  subEl.textContent = "";
+  await new Promise(r => setTimeout(r, 20000));
+
+  // 2) Türkçe — 20 saniye
+  arEl.textContent = dua.tr;
+  subEl.textContent = "";
+  await new Promise(r => setTimeout(r, 20000));
+
+  // 3) Almanca — 20 saniye
+  arEl.textContent = dua.de;
+  subEl.textContent = "";
+  await new Promise(r => setTimeout(r, 20000));
+}
+
 function startDuaMode(){
   phase = "ezan";
-
-  const ezanBox = document.getElementById("ezan-display");
-  const ar = document.getElementById("ezan-ar");
-  const tr = document.getElementById("ezan-tr");
-  const de = document.getElementById("ezan-de");
-
-  if(ar) ar.innerHTML = EZAN_TEXTS.ar;
-  if(tr) tr.textContent = EZAN_TEXTS.tr;
-  if(de) de.textContent = EZAN_TEXTS.de;
-
-  if(ezanBox) ezanBox.classList.remove("hidden");
-
   updateCountdownLabels("ezan");
-
-  setTimeout(()=>{
-    if(phase==="ezan"){
-      if(ar) ar.classList.add("hidden");
-      if(tr) tr.classList.remove("hidden");
-    }
-  },20000);
-
-  setTimeout(()=>{
-    if(phase==="ezan"){
-      if(tr) tr.classList.add("hidden");
-      if(de) de.classList.remove("hidden");
-    }
-  },40000);
+  playEzanDuaSequence();
 }
 
 function stopDuaMode(){
-  const ezanBox = document.getElementById("ezan-display");
-  if(ezanBox) ezanBox.classList.add("hidden");
+  // Sağ panel zaten günlük mesaja dönecek, burada ekstra gizleme yok
 }
 
 /* =========================
@@ -692,8 +723,8 @@ function updateCurrentAndNextAndCountdown(){
   const prayers = [
     {key:"imsak", ezan:v.imsak, kamet:k.imsak},
     {key:"gunes", ezan:v.gunes, kamet:k.gunes},
-    {key:"ogle", ezan:v.ogle, kamet:k.ogle},
-    {key:"ikindi", ezan:v.ikindi, kamet:k.ikindi},
+    {key:"ogle",  ezan:v.ogle,  kamet:k.ogle},
+    {key:"ikindi",ezan:v.ikindi,kamet:k.ikindi},
     {key:"aksam", ezan:v.aksam, kamet:k.aksam},
     {key:"yatsi", ezan:v.yatsi, kamet:k.yatsi}
   ];
@@ -716,9 +747,10 @@ function updateCurrentAndNextAndCountdown(){
   if(curEl) curEl.textContent = vakitNames[currentLang][current.key];
 
   const nextEl = document.getElementById("next-prayer");
-  if(nextEl && next) nextEl.textContent = labels[currentLang].sonraki + vakitNames[currentLang][next.key];
-
-  /* === FAZ YÖNETİMİ === */
+  if(nextEl && next){
+    const prefix = currentLang==="tr" ? "Sonraki: " : "Nächste: ";
+    nextEl.textContent = prefix + vakitNames[currentLang][next.key];
+  }
 
   // 1) EZAN BAŞLANGICI
   if(phase==="normal" && currentEzanSec!==null && Math.abs(nowSec-currentEzanSec)<=2){
@@ -799,6 +831,38 @@ function applySeasonTheme() {
 }
 
 /* =========================
+   DİL UYGULA
+========================= */
+function applyLanguage() {
+  const tl = document.getElementById("title-left");
+  const tc = document.getElementById("title-center");
+  const trh = document.getElementById("title-right");
+  const dl = document.querySelector(".duyuru-label");
+  const fl = document.getElementById("footer-lang");
+
+  if (currentLang === "tr") {
+    if (tl) tl.textContent = "NAMAZ VAKİTLERİ";
+    if (tc) tc.textContent = "GÜNÜN VAKTİ";
+    if (trh) trh.textContent = "GÜNÜN MESAJI";
+    if (dl) dl.textContent = "DUYURU:";
+    if (fl) fl.textContent = "Bu uygulama AyTa® tarafından hazırlanmıştır";
+  } else {
+    if (tl) tl.textContent = "GEBETSZEITEN";
+    if (tc) tc.textContent = "AKTUELLE ZEIT";
+    if (trh) trh.textContent = "TAGESBOTSCHAFT";
+    if (dl) dl.textContent = "ANKÜNDIGUNG:";
+    if (fl) fl.textContent = "Diese Anwendung wurde von AyTa® erstellt";
+  }
+
+  updateCountdownLabels("vakit");
+
+  // Günün mesajını da dile göre güncelle
+  if (window.DuaModule && window.DuaModule.updateDailyDua) {
+    window.DuaModule.updateDailyDua(currentLang);
+  }
+}
+
+/* =========================
    BAŞLAT
 ========================= */
 window.addEventListener("load",()=>{
@@ -838,23 +902,76 @@ window.addEventListener("load",()=>{
     currentLang = (currentLang === "tr") ? "de" : "tr";
     applyLanguage();
   }, 30000);
-});
 
-// BAYRAM MODALI — KAYDET
-document.getElementById("bayram-save")?.addEventListener("click", () => {
-  const input = document.getElementById("bayram-ezan-input");
-  const ezan = input ? input.value : "";
+  // HİCRÎ DÜZELTME BUTONLARI
+  const minus = document.getElementById("hijri-minus");
+  const plus  = document.getElementById("hijri-plus");
+  const disp  = document.getElementById("hijri-offset-display");
 
-  if (ezan) {
-    const ezanEl = document.getElementById("bayram-ezan");
-    const kametEl = document.getElementById("bayram-kamet");
+  if (disp) disp.textContent = getHijriOffset();
 
-    if (ezanEl) ezanEl.textContent = ezan;
-    if (kametEl) kametEl.textContent = "-";
-
-    localStorage.setItem("bayramSaat", ezan);
+  if (minus) {
+    minus.addEventListener("click", () => {
+      const v = getHijriOffset() - 1;
+      setHijriOffset(v);
+      if (disp) disp.textContent = v;
+      updateClockAndDates();
+    });
+  }
+  if (plus) {
+    plus.addEventListener("click", () => {
+      const v = getHijriOffset() + 1;
+      setHijriOffset(v);
+      if (disp) disp.textContent = v;
+      updateClockAndDates();
+    });
   }
 
-  const modal = document.getElementById("bayram-modal");
-  if (modal) modal.classList.add("hidden");
+  // SABAH KAMETİ KAYDET
+  const sabahSave = document.getElementById("sabah-save");
+  if (sabahSave) {
+    sabahSave.addEventListener("click", () => {
+      const inp = document.getElementById("input-sabah-kamet");
+      const val = inp ? inp.value : "";
+      if (val) {
+        lsSet("sabahKamet", val);
+        const sEl = document.getElementById("imsak-kamet");
+        if (sEl) sEl.textContent = val;
+      }
+    });
+  }
+
+  // DUYURU KAYDET
+  const duySave = document.getElementById("duyuru-save");
+  if (duySave) {
+    duySave.addEventListener("click", () => {
+      const ta = document.getElementById("input-duyuru");
+      const val = ta ? ta.value : "";
+      lsSet("duyuruText", val);
+      const dEl = document.getElementById("duyuru-text");
+      if (dEl) dEl.textContent = val;
+    });
+  }
+
+  // BAYRAM MODALI — KAYDET
+  const btnBayramSave = document.getElementById("bayram-save");
+  if (btnBayramSave) {
+    btnBayramSave.addEventListener("click", () => {
+      const input = document.getElementById("bayram-ezan-input");
+      const ezan = input ? input.value : "";
+
+      if (ezan) {
+        const ezanEl = document.getElementById("bayram-ezan");
+        const kametEl = document.getElementById("bayram-kamet");
+
+        if (ezanEl) ezanEl.textContent = ezan;
+        if (kametEl) kametEl.textContent = "-";
+
+        localStorage.setItem("bayramSaat", ezan);
+      }
+
+      const modal = document.getElementById("bayram-modal");
+      if (modal) modal.classList.add("hidden");
+    });
+  }
 });
