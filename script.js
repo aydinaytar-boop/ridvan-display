@@ -779,6 +779,26 @@ function mainLoop(){
 }
 
 /* =========================
+   MEVSİMSEL TEMA
+========================= */
+function applySeasonTheme() {
+  const month = new Date().getMonth() + 1;
+  const body = document.body;
+
+  body.classList.remove("winter", "spring", "summer", "autumn");
+
+  if (month === 12 || month === 1 || month === 2) {
+    body.classList.add("winter");
+  } else if (month >= 3 && month <= 5) {
+    body.classList.add("spring");
+  } else if (month >= 6 && month <= 8) {
+    body.classList.add("summer");
+  } else {
+    body.classList.add("autumn");
+  }
+}
+
+/* =========================
    BAŞLAT
 ========================= */
 window.addEventListener("load",()=>{
