@@ -393,22 +393,6 @@ const vakitler2026 = [
 
 
 /* =========================
-   FALLBACK VAKİTLER
-========================= */
-const fallbackTimes = {
-  imsak:"05:19",
-  gunes:"06:57",
-  ogle:"12:14",
-  ikindi:"14:50",
-  aksam:"17:21",
-  yatsi:"18:47"
-};
-
-/* ================== NAMAZ VAKİTLERİ 2026 ================== */
-// Buraya kendi uzun listen gelecek
-const vakitler2026 = [...]; // Kısaltılmış
-
-/* =========================
    JSON'DAN BUGÜNÜ ÇEK
 ========================= */
 function getTodayTimesFromJSON() {
@@ -577,20 +561,14 @@ function toSeconds(t){
 }
 
 /* =========================
-   EZAN DUASI
+   EZAN → DUA → KAMET → BLACKOUT
 ========================= */
-const EZAN_TEXTS = {
-  ar:"اللَّهُمَّ رَبَّ هٰذِهِ الدَّعْوَةِ التَّامَّةِ...",
-  tr:"Allah’ım! Bu tam davetin...",
-  de:"O Allah, Herr dieses vollkommenen Rufes..."
-};
-
-let prayerPhase = "normal"; // normal | ezan | kamet | blackout
+let phase = "normal"; // normal | ezan | kamet | blackout
 let currentEzanSec = null;
 let currentKametSec = null;
 
 function startDuaMode(){
-  prayerPhase = "ezan";
+  phase = "ezan";
 
   const ezanBox = document.getElementById("ezan-display");
   const ar = document.getElementById("ezan-ar");
@@ -604,6 +582,20 @@ function startDuaMode(){
   if(ezanBox) ezanBox.classList.remove("hidden");
 
   updateCountdownLabels("ezan");
+
+  setTimeout(()=>{
+    if(phase==="ezan"){
+      if(ar) ar.classList.add("hidden");
+      if(tr) tr.classList.remove("hidden");
+    }
+  },20000);
+
+  setTimeout(()=>{
+    if(phase==="ezan"){
+      if(tr) tr.classList.add("hidden");
+      if(de) de.classList.remove("hidden");
+    }
+  },40000);
 }
 
 function stopDuaMode(){
@@ -618,9 +610,7 @@ function showFullBlackout(){
   const o = document.getElementById("dim-overlay");
   if(!o) return;
   o.classList.remove("hidden");
-  o.style.background = "black";
 }
-
 function hideFullBlackout(){
   const o = document.getElementById("dim-overlay");
   if(!o) return;
@@ -636,7 +626,7 @@ function updateCountdownLabels(mode){
   const s = document.getElementById("lbl-secs");
 
   if(mode==="ezan"){
-    if(h) h.textContent = currentLang==="tr" ? "Ezan Duası" : "Adhan Dua";
+    if(h) h.textContent = currentLang==="tr" ? "Ezan Duası" : "Adhan-Dua";
     if(m) m.textContent = "";
     if(s) s.textContent = "";
     return;
@@ -661,37 +651,6 @@ function updateCountdownLabels(mode){
 }
 
 /* =========================
-   DİL LABELS
-========================= */
-const labels = {
-  tr:{ titleCenter:"GÜNÜN VAKTİ", sonraki:"Sonraki: " },
-  de:{ titleCenter:"TAGESZEIT",   sonraki:"Nächste: " }
-};
-
-const vakitNames = {
-  tr:{ imsak:"İmsak", gunes:"Güneş", ogle:"Öğle", ikindi:"İkindi", aksam:"Akşam", yatsi:"Yatsı", cuma:"Cuma", bayram:"Bayram" },
-  de:{ imsak:"Fadjr", gunes:"Schuruq", ogle:"Dhuhr", ikindi:"Assr", aksam:"Maghrib", yatsi:"Ischaa", cuma:"Dschum'a", bayram:"Festgebet" }
-};
-
-/* =========================
-   DİL UYGULA
-========================= */
-function applyLanguage(){
-  const L = labels[currentLang];
-
-  const titleCenter = document.getElementById("title-center");
-  if(titleCenter) titleCenter.textContent = L.titleCenter;
-
-  const nextEl = document.getElementById("next-prayer");
-  if(nextEl){
-    const txt = nextEl.textContent.split(":")[1] || "";
-    nextEl.textContent = L.sonraki + txt.trim();
-  }
-
-  updateCountdownLabels("vakit");
-}
-
-/* =========================
    TABLOYU DOLDUR
 ========================= */
 function fillTimesTable(){
@@ -699,10 +658,19 @@ function fillTimesTable(){
   const k = getKamatTimes(v);
 
   const map = {
-    "imsak-ezan":v.imsak, "gunes-ezan":v.gunes, "ogle-ezan":v.ogle,
-    "ikindi-ezan":v.ikindi, "aksam-ezan":v.aksam, "yatsi-ezan":v.yatsi,
-    "imsak-kamet":k.imsak, "gunes-kamet":k.gunes, "ogle-kamet":k.ogle,
-    "ikindi-kamet":k.ikindi, "aksam-kamet":k.aksam, "yatsi-kamet":k.yatsi
+    "imsak-ezan":v.imsak,
+    "gunes-ezan":v.gunes,
+    "ogle-ezan":v.ogle,
+    "ikindi-ezan":v.ikindi,
+    "aksam-ezan":v.aksam,
+    "yatsi-ezan":v.yatsi,
+
+    "imsak-kamet":k.imsak,
+    "gunes-kamet":k.gunes,
+    "ogle-kamet":k.ogle,
+    "ikindi-kamet":k.ikindi,
+    "aksam-kamet":k.aksam,
+    "yatsi-kamet":k.yatsi
   };
 
   for(const id in map){
@@ -741,7 +709,7 @@ function updateCurrentAndNextAndCountdown(){
   }
   if(!current) current=prayers[0];
 
-  currentEzanSec = toSeconds(current.ezan);
+  currentEzanSec  = toSeconds(current.ezan);
   currentKametSec = toSeconds(current.kamet);
 
   const curEl = document.getElementById("current-prayer");
@@ -753,20 +721,20 @@ function updateCurrentAndNextAndCountdown(){
   /* === FAZ YÖNETİMİ === */
 
   // 1) EZAN BAŞLANGICI
-  if(prayerPhase==="normal" && currentEzanSec!==null && Math.abs(nowSec-currentEzanSec)<=2){
+  if(phase==="normal" && currentEzanSec!==null && Math.abs(nowSec-currentEzanSec)<=2){
     startDuaMode();
   }
 
   // 2) EZAN → KAMET GEÇİŞİ (60 saniye sonra)
-  if(prayerPhase==="ezan" && nowSec > currentEzanSec + 60){
-    prayerPhase="kamet";
+  if(phase==="ezan" && nowSec > currentEzanSec + 60){
+    phase="kamet";
     stopDuaMode();
     updateCountdownLabels("kamet");
   }
 
   // 3) KAMET GERİ SAYIMI
   let targetSec = null;
-  if(prayerPhase==="kamet" && currentKametSec!==null){
+  if(phase==="kamet" && currentKametSec!==null){
     targetSec = currentKametSec;
   } else if(next){
     targetSec = toSeconds(next.ezan);
@@ -790,13 +758,13 @@ function updateCurrentAndNextAndCountdown(){
   if(sEl) sEl.textContent=String(ds).padStart(2,"0");
 
   // 4) KAMET → BLACKOUT
-  if(prayerPhase==="kamet" && diff<=0){
-    prayerPhase="blackout";
+  if(phase==="kamet" && diff<=0){
+    phase="blackout";
     showFullBlackout();
 
     setTimeout(()=>{
       hideFullBlackout();
-      prayerPhase="normal";
+      phase="normal";
       updateCountdownLabels("vakit");
     },10*60*1000);
   }
@@ -824,18 +792,51 @@ window.addEventListener("load",()=>{
     if(dEl) dEl.textContent=duy;
   }
 
- // SABAH KAMETİ YÜKLE
-const sabah = lsGet("sabahKamet");
-if (sabah) {
-  const sEl = document.getElementById("imsak-kamet");
-  if (sEl) sEl.textContent = sabah;
-}
+  // SABAH KAMETİ YÜKLE
+  const sabah=lsGet("sabahKamet");
+  if(sabah){
+    const sEl=document.getElementById("imsak-kamet");
+    if(sEl) sEl.textContent=sabah;
+  }
 
-// ⭐ BAYRAM SAATİNİ YÜKLE (EKLENDİ – ARTIK KALICI) ⭐
-const bayramSaat = localStorage.getItem("bayramSaat");
-if (bayramSaat) {
-  const ezanEl = document.getElementById("bayram-ezan");
-  const kametEl = document.getElementById("bayram-kamet");
-  if (ezanEl) ezanEl.textContent = bayramSaat;
-  if (kametEl) kametEl.textContent = "-";
-}
+  // BAYRAM SAATİ YÜKLE
+  const bayramSaat = localStorage.getItem("bayramSaat");
+  if(bayramSaat){
+    const ezanEl=document.getElementById("bayram-ezan");
+    const kametEl=document.getElementById("bayram-kamet");
+    if(ezanEl) ezanEl.textContent=bayramSaat;
+    if(kametEl) kametEl.textContent="-";
+  }
+
+  fillTimesTable();
+  applyLanguage();
+  mainLoop();
+  setInterval(mainLoop,1000);
+
+  // OTOMATİK DİL DEĞİŞİMİ (30 saniyede bir)
+  setInterval(()=>{
+    currentLang = (currentLang==="tr") ? "de" : "tr";
+    applyLanguage();
+  },30000);
+});
+
+//* =========================
+   BAYRAM MODALI — KAYDET
+========================= */
+document.getElementById("bayram-save")?.addEventListener("click", () => {
+  const input = document.getElementById("bayram-ezan-input");
+  const ezan = input ? input.value : "";
+
+  if (ezan) {
+    const ezanEl = document.getElementById("bayram-ezan");
+    const kametEl = document.getElementById("bayram-kamet");
+
+    if (ezanEl) ezanEl.textContent = ezan;
+    if (kametEl) kametEl.textContent = "-";
+
+    localStorage.setItem("bayramSaat", ezan);
+  }
+
+  const modal = document.getElementById("bayram-modal");
+  if (modal) modal.classList.add("hidden");
+});
