@@ -819,10 +819,7 @@ window.addEventListener("load",()=>{
     applyLanguage();
   },30000);
 });
-
-//* =========================
-   BAYRAM MODALI — KAYDET
-========================= */
+// BAYRAM MODALI — KAYDET
 document.getElementById("bayram-save")?.addEventListener("click", () => {
   const input = document.getElementById("bayram-ezan-input");
   const ezan = input ? input.value : "";
