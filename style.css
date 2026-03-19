@@ -468,3 +468,30 @@ body {
     left: 120%;
   }
 }
+
+/* ============================
+   SOL PANEL AKTİF VAKİT ALTIN PARLAMA + PULSE
+============================ */
+.vakit-row.active {
+  background: linear-gradient(90deg, #d4af37, #f7e27d, #d4af37);
+  color: #000;
+  font-weight: bold;
+  border-radius: 6px;
+  animation: pulseGlow 1.6s infinite;
+  box-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
+}
+
+@keyframes pulseGlow {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 6px rgba(255, 215, 0, 0.4);
+  }
+  50% {
+    transform: scale(1.03);
+    box-shadow: 0 0 16px rgba(255, 215, 0, 0.9);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 6px rgba(255, 215, 0, 0.4);
+  }
+}
