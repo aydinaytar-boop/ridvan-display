@@ -840,6 +840,9 @@ function applyLanguage() {
   const dl = document.querySelector(".duyuru-label");
   const fl = document.getElementById("footer-lang");
 
+  // ============================
+  // BAŞLIKLAR
+  // ============================
   if (currentLang === "tr") {
     if (tl) tl.textContent = "NAMAZ VAKİTLERİ";
     if (tc) tc.textContent = "GÜNÜN VAKTİ";
@@ -854,9 +857,35 @@ function applyLanguage() {
     if (fl) fl.textContent = "Diese Anwendung wurde von AyTa® erstellt";
   }
 
+  // ============================
+  // SOL PANEL VAKİT İSİMLERİ
+  // ============================
+  const vakitKeys = ["imsak","gunes","ogle","ikindi","aksam","yatsi"];
+  vakitKeys.forEach(key => {
+    const el = document.getElementById("lbl-" + key);
+    if (el) el.textContent = vakitNames[currentLang][key];
+  });
+
+  // ============================
+  // SAĞ PANEL “GÜNÜN VAKTİ” (CURRENT PHASE)
+  // ============================
+  const phaseEl = document.getElementById("current-phase-label");
+  if (phaseEl) {
+    if (currentLang === "tr") {
+      phaseEl.textContent = currentPhaseTR;
+    } else {
+      phaseEl.textContent = currentPhaseDE;
+    }
+  }
+
+  // ============================
+  // COUNTDOWN LABELS
+  // ============================
   updateCountdownLabels("vakit");
 
-  // Günün mesajını da dile göre güncelle
+  // ============================
+  // GÜNÜN MESAJI
+  // ============================
   if (window.DuaModule && window.DuaModule.updateDailyDua) {
     window.DuaModule.updateDailyDua(currentLang);
   }
