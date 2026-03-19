@@ -974,8 +974,4 @@ window.addEventListener("load",()=>{
       if (modal) modal.classList.add("hidden");
     });
   }
-<<<<<<< HEAD
 });
-=======
-});
->>>>>>> 018e0985e5f2a762d6c6363f03479021c6b61b6b
