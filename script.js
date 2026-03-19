@@ -787,38 +787,39 @@ window.addEventListener("load",()=>{
 
   // DUYURU YÜKLE
   const duy = lsGet("duyuruText");
-  if(duy){
-    const dEl=document.getElementById("duyuru-text");
-    if(dEl) dEl.textContent=duy;
+  if (duy) {
+    const dEl = document.getElementById("duyuru-text");
+    if (dEl) dEl.textContent = duy;
   }
 
   // SABAH KAMETİ YÜKLE
-  const sabah=lsGet("sabahKamet");
-  if(sabah){
-    const sEl=document.getElementById("imsak-kamet");
-    if(sEl) sEl.textContent=sabah;
+  const sabah = lsGet("sabahKamet");
+  if (sabah) {
+    const sEl = document.getElementById("imsak-kamet");
+    if (sEl) sEl.textContent = sabah;
   }
 
   // BAYRAM SAATİ YÜKLE
   const bayramSaat = localStorage.getItem("bayramSaat");
-  if(bayramSaat){
-    const ezanEl=document.getElementById("bayram-ezan");
-    const kametEl=document.getElementById("bayram-kamet");
-    if(ezanEl) ezanEl.textContent=bayramSaat;
-    if(kametEl) kametEl.textContent="-";
+  if (bayramSaat) {
+    const ezanEl = document.getElementById("bayram-ezan");
+    const kametEl = document.getElementById("bayram-kamet");
+    if (ezanEl) ezanEl.textContent = bayramSaat;
+    if (kametEl) kametEl.textContent = "-";
   }
 
   fillTimesTable();
   applyLanguage();
   mainLoop();
-  setInterval(mainLoop,1000);
+  setInterval(mainLoop, 1000);
 
-  // OTOMATİK DİL DEĞİŞİMİ (30 saniyede bir)
-  setInterval(()=>{
-    currentLang = (currentLang==="tr") ? "de" : "tr";
+  // OTOMATİK DİL DEĞİŞİMİ
+  setInterval(() => {
+    currentLang = (currentLang === "tr") ? "de" : "tr";
     applyLanguage();
-  },30000);
+  }, 30000);
 });
+
 // BAYRAM MODALI — KAYDET
 document.getElementById("bayram-save")?.addEventListener("click", () => {
   const input = document.getElementById("bayram-ezan-input");
