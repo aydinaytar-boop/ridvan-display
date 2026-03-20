@@ -752,9 +752,12 @@ function updateCurrentAndNextAndCountdown(){
     nextEl.textContent = prefix + vakitNames[currentLang][next.key];
   }
 
-  // ⭐⭐ EKLENMESİ GEREKEN KRİTİK SATIR ⭐⭐
+  // ⭐ AKTİF VAKTİ İŞARETLEME
   highlightCurrentPrayer(current.key);
-}
+
+  // ============================
+  // AŞAĞISI SENİN GÖNDERDİĞİN DEVAM BLOĞU
+  // ============================
 
   // 1) EZAN BAŞLANGICI
   if(phase==="normal" && currentEzanSec!==null && Math.abs(nowSec-currentEzanSec)<=2){
