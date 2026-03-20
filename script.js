@@ -752,6 +752,10 @@ function updateCurrentAndNextAndCountdown(){
     nextEl.textContent = prefix + vakitNames[currentLang][next.key];
   }
 
+  // ⭐⭐ EKLENMESİ GEREKEN KRİTİK SATIR ⭐⭐
+  highlightCurrentPrayer(current.key);
+}
+
   // 1) EZAN BAŞLANGICI
   if(phase==="normal" && currentEzanSec!==null && Math.abs(nowSec-currentEzanSec)<=2){
     startDuaMode();
